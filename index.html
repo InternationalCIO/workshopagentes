@@ -181,5 +181,26 @@
       </p>
     </div>
   </footer>
+
+  <!-- ===== Widget de chat: orquestadorAgent ===== -->
+  <button class="chat-toggle" id="chatToggle" aria-label="Abrir chat con orquestadorAgent" aria-expanded="false">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-3 11H7v-2h10v2zm0-4H7V7h10v2z"/>
+    </svg>
+  </button>
+
+  <aside class="chat-window" id="chatWindow" role="dialog" aria-label="Conversación con orquestadorAgent" hidden>
+    <header class="chat-header">
+      <span class="chat-title">orquestadorAgent</span>
+      <button class="chat-close" id="chatClose" aria-label="Cerrar chat">&times;</button>
+    </header>
+    <div class="chat-body" id="chatBody"></div>
+    <form class="chat-form" id="chatForm">
+      <input type="text" id="chatInput" placeholder="Escribe tu mensaje&hellip;" autocomplete="off" aria-label="Mensaje">
+      <button type="submit">Enviar</button>
+    </form>
+  </aside>
+
+  <script src="js/orquestador.js"></script>
 </body>
 </html>

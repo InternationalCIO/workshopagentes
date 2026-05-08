@@ -132,6 +132,42 @@
           y que te enseña cada paso por si quieres cambiar algo.
         </div>
 
+        <h3><span class="step-num">FASE II</span> Le damos voz: el orquestadorAgent</h3>
+        <p>
+          En la segunda fase añadimos un <strong>chat</strong> en la esquina inferior derecha. El botón
+          rojo abre una conversación con el <strong>orquestadorAgent</strong>, nuestro primer «agente».
+        </p>
+        <p>
+          Lo importante: este agente <strong>no usa Inteligencia Artificial todavía</strong>. Funciona con
+          una técnica clásica que se llama «detección de intenciones por palabras clave»:
+        </p>
+        <p>
+          Cuando le escribes algo, el agente normaliza tu texto (lo pasa a minúsculas, le quita las tildes
+          y los signos) y busca palabras conocidas. Si encuentra «hola» o «buenas», sabe que es un saludo.
+          Si encuentra «gracias», sabe que es un agradecimiento. Si no encuentra nada que reconozca, te avisa
+          de que en esta fase aún no sabe responder a otros temas.
+        </p>
+
+        <div class="analogy">
+          <strong>Analogía:</strong> imagina al recepcionista de un hotel que solo conoce 4 frases —
+          «hola», «adiós», «gracias» y «¿qué tal?». Si le hablas en sueco antiguo, sonríe educadamente
+          y te dice: «perdone, eso aún no lo aprendo». Pues nuestro agente es ese recepcionista. Útil,
+          predecible y muy barato de mantener.
+        </div>
+
+        <p>
+          También sabe detectar mensajes <em>basura</em> (algo como <code>asdfgklñkj</code>): mira si tu texto
+          tiene vocales, si no hay letras repetidas raras, si la longitud es razonable&hellip; Si todo eso falla,
+          asume que es ruido y te pide que lo reformules.
+        </p>
+
+        <p>
+          ¿Por qué empezamos así de simple? Porque <strong>los agentes de IA reales se construyen igual</strong>:
+          empiezas por reglas claras y predecibles, las pruebas, y solo cuando funcionan le añades modelos más
+          potentes detrás. En las próximas fases iremos sustituyendo este sistema por componentes cada vez más
+          inteligentes &mdash; pero la idea de fondo (un orquestador que recibe, entiende y delega) se queda.
+        </p>
+
         <h3><span class="step-num">CIERRE</span> ¿Y ahora?</h3>
         <p>
           La web que estás viendo es el resultado de una conversación de aproximadamente una hora, sin escribir
