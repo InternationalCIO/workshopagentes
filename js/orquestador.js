@@ -15,10 +15,15 @@ const orquestadorAgent = {
 
   bienvenida:
     '👋 ¡Hola! Soy <strong>orquestadorAgent</strong>, el agente de este workshop.\n\n' +
-    'En esta fase mi misión es darte la bienvenida y conversar contigo cuando me saludes, ' +
-    'te despidas o me preguntes cómo estoy. Todavía no sé hablar de otros temas — eso llegará ' +
-    'en las siguientes fases.\n\n' +
-    'Hablo <strong>únicamente en español</strong>. Cuéntame, ¿cómo te encuentras hoy?',
+    'Sé conversar contigo (saludos, despedidas, agradecimientos, ¿cómo estás?) y, si necesitas hacer ' +
+    'cuentas, delego en mi compañero <strong>MatematicasAgente</strong>.\n\n' +
+    'Comandos disponibles:\n' +
+    '• <code>/sumar A B</code>\n' +
+    '• <code>/restar A B</code>\n' +
+    '• <code>/multiplicar A B</code>\n' +
+    '• <code>/dividir A B</code>\n' +
+    '• <code>/ayuda</code>\n\n' +
+    'Hablo <strong>únicamente en español</strong>. ¿En qué te ayudo?',
 
   // Quita tildes, pasa a minúsculas y limpia signos.
   normalizar(texto) {
@@ -106,11 +111,16 @@ const orquestadorAgent = {
       'No me has escrito nada todavía. ¡Anímate y dime algo!'
     ],
     desconocido: [
-      'En esta fase del workshop solo sé responder a saludos, despedidas, agradecimientos y preguntas sobre cómo estoy. Para el resto, tendrás que esperar a las próximas fases del taller.'
+      'En esta fase del workshop solo sé responder a saludos, despedidas, agradecimientos, preguntas sobre cómo estoy y a los comandos matemáticos: <code>/sumar</code>, <code>/restar</code>, <code>/multiplicar</code>, <code>/dividir</code> y <code>/ayuda</code>. Para el resto, espera a las próximas fases del taller.'
     ]
   },
 
   responder(texto) {
+    // 1. Si es un comando matemático, delegamos en MatematicasAgente.
+    if (typeof matematicasAgente !== 'undefined' && matematicasAgente.esComando(texto)) {
+      return matematicasAgente.ejecutar(texto);
+    }
+    // 2. Si no, gestionamos el smalltalk como antes.
     const intencion = this.detectarIntencion(texto);
     const opciones = this.respuestas[intencion];
     return opciones[Math.floor(Math.random() * opciones.length)];

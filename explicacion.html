@@ -168,6 +168,38 @@
           inteligentes &mdash; pero la idea de fondo (un orquestador que recibe, entiende y delega) se queda.
         </p>
 
+        <h3><span class="step-num">FASE III</span> Dos agentes que trabajan en equipo</h3>
+        <p>
+          En esta fase añadimos un <strong>segundo agente</strong>: <code>MatematicasAgente</code>. Solo sabe
+          hacer cuatro cosas — sumar, restar, multiplicar y dividir — pero las hace bien y rápido.
+          El orquestador sigue siendo la cara visible: el que recibe el mensaje del usuario y decide qué hacer.
+        </p>
+        <p>
+          La regla nueva es muy simple: si tu mensaje empieza por <code>/sumar</code>, <code>/restar</code>,
+          <code>/multiplicar</code>, <code>/dividir</code> o <code>/ayuda</code>, el orquestador <strong>delega</strong>
+          la respuesta en MatematicasAgente. Para todo lo demás (saludos, despedidas, etc.), responde él mismo
+          como en la fase anterior.
+        </p>
+
+        <div class="analogy">
+          <strong>Analogía:</strong> piensa en una empresa. El orquestador es el recepcionista: te recibe,
+          escucha lo que necesitas y, si la pregunta es de finanzas, te pasa con el departamento de finanzas
+          (MatematicasAgente). El recepcionista no sabe hacer las cuentas, pero <em>sabe a quién pasarle el caso</em>.
+          Eso es la esencia de un sistema <strong>multiagente</strong>.
+        </div>
+
+        <p>
+          ¿Por qué hacerlo así en vez de meter todo en un solo agente? Porque cuando los agentes son pequeños y
+          tienen una sola responsabilidad <strong>son más fáciles de mantener, probar y mejorar</strong>. Si mañana
+          queremos añadir un agente de traducción o de reservas, no tocamos el resto: solo enseñamos al orquestador
+          a delegar también en él.
+        </p>
+
+        <p>
+          Prueba en el chat: <code>/sumar 12 8</code>, <code>/dividir 10 0</code> (¡cuidado!), <code>/ayuda</code>,
+          y mezcla con un <em>«gracias»</em> para ver al orquestador volver al smalltalk.
+        </p>
+
         <h3><span class="step-num">CIERRE</span> ¿Y ahora?</h3>
         <p>
           La web que estás viendo es el resultado de una conversación de aproximadamente una hora, sin escribir
