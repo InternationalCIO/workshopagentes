@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>¿Cómo se ha hecho esta web? · Workshop MIT</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="top-bar"></div>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="kicker">Detrás del telón</p>
+      <h1>¿Cómo se ha hecho <span class="accent">esta web</span>?</h1>
+      <p class="lead">
+        Sin tecnicismos. Sin jerga. Solo la historia, contada como si estuviéramos tomando un café.
+      </p>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="prose">
+        <a href="index.html" class="back-link">&larr; Volver a la portada</a>
+
+        <p>
+          Esta web la hemos construido entre dos: una persona &mdash; tú &mdash; con una idea clara
+          de lo que quería contar, y un asistente de Inteligencia Artificial llamado <strong>Claude</strong>,
+          que ha ido escribiendo el código a partir de las indicaciones recibidas.
+        </p>
+
+        <p>
+          A continuación te contamos los pasos, sin entrar en detalles técnicos. La idea es que entiendas el
+          <em>qué</em> y el <em>por qué</em>, no el <em>cómo</em> exacto. Si después te pica la curiosidad,
+          siempre podrás volver a este texto e ir más allá.
+        </p>
+
+        <h3><span class="step-num">PASO 1</span> Decidir qué queríamos contar</h3>
+        <p>
+          Lo primero, lo más importante y lo menos técnico: <strong>ponernos de acuerdo</strong>.
+          ¿Qué tipo de web es? ¿Para quién? ¿Qué se ve en la portada? ¿Qué información mostramos
+          y qué dejamos fuera (especialmente si hablamos de datos personales)?
+        </p>
+        <p>
+          Antes de teclear una sola línea, decidimos: una galería de los 16 participantes del workshop,
+          mostrando solo el perfil profesional &mdash; sin emails, sin teléfonos, sin direcciones. Internet
+          es un sitio público y respetar la privacidad estaba por encima de cualquier otra cosa.
+        </p>
+
+        <div class="analogy">
+          <strong>Analogía:</strong> es como cuando preparas una cena. Antes de encender los fogones, decides
+          el menú, los invitados y si alguien es alérgico. Si te saltas ese paso, lo demás se complica.
+        </div>
+
+        <h3><span class="step-num">PASO 2</span> Crear el «esqueleto» (HTML)</h3>
+        <p>
+          Una página web tiene tres ingredientes: <strong>HTML</strong>, <strong>CSS</strong> y a veces
+          <strong>JavaScript</strong>. Aquí solo hemos usado los dos primeros, porque queríamos algo sencillo.
+        </p>
+        <p>
+          El <strong>HTML</strong> es el <em>esqueleto</em>. Define qué cosas hay en la página y en qué orden:
+          un título arriba, una sección con tarjetas en medio, un pie de página abajo. Nada de colores ni
+          tipografías &mdash; solo la estructura.
+        </p>
+
+        <div class="analogy">
+          <strong>Analogía:</strong> piensa en una casa en obra gris. Las paredes están en pie, las habitaciones
+          tienen su sitio, pero todavía no hay pintura ni muebles. Eso es el HTML.
+        </div>
+
+        <h3><span class="step-num">PASO 3</span> Pintarla con estilo (CSS)</h3>
+        <p>
+          El <strong>CSS</strong> es la <em>decoración</em>. Decide los colores, las tipografías, los márgenes,
+          cómo se comporta la página cuando la abres en un móvil o en un portátil grande, qué pasa cuando
+          pasas el ratón por encima de una tarjeta&hellip;
+        </p>
+        <p>
+          Para esta web hemos elegido el rojo característico del MIT (<code>#A31F34</code>), una tipografía
+          limpia (Segoe UI, la que ya viene en Windows) y un diseño que se adapta solo al tamaño de tu pantalla.
+        </p>
+
+        <div class="analogy">
+          <strong>Analogía:</strong> el CSS es la decoración de la casa. Mismo esqueleto, pero con paredes pintadas,
+          luz cálida, alfombras y plantas. La casa no cambia de forma, solo de personalidad.
+        </div>
+
+        <h3><span class="step-num">PASO 4</span> Probarla en local</h3>
+        <p>
+          Antes de enseñársela a nadie, abrimos la página en el navegador (haciendo doble clic en el archivo
+          <code>index.html</code>). Sin servidores, sin nada raro &mdash; literalmente, como si abrieras un PDF.
+        </p>
+        <p>
+          Eso permite ver cómo queda, detectar errores y ajustar detalles antes de subirla a internet.
+        </p>
+
+        <h3><span class="step-num">PASO 5</span> Subirla a internet (GitHub Pages)</h3>
+        <p>
+          Para que cualquiera pueda verla desde su móvil, necesitamos un sitio donde alojarla.
+          Hemos usado <strong>GitHub Pages</strong>, un servicio gratuito de Microsoft que toma los archivos
+          de una página web y los sirve en una URL pública. Sin pagar, sin contratos, sin servidores que mantener.
+        </p>
+        <p>
+          El proceso es: copias los archivos a un repositorio en GitHub, activas la opción «Pages» y, en
+          unos minutos, tu web está viva en una dirección que cualquiera puede visitar.
+        </p>
+
+        <div class="analogy">
+          <strong>Analogía:</strong> imagínate que GitHub es una imprenta y GitHub Pages es la librería. Tú entregas
+          el manuscrito (los archivos), ellos lo imprimen y lo ponen en el escaparate para que todo el mundo
+          pueda comprarlo &mdash; en este caso, leerlo gratis.
+        </div>
+
+        <h3><span class="step-num">PASO 6</span> El truco: trabajar con un asistente de IA</h3>
+        <p>
+          Lo verdaderamente novedoso de este ejercicio no es la web en sí (las webs sencillas existen desde
+          hace 30 años), sino <strong>cómo</strong> la hemos construido: pidiéndoselo a una IA en lenguaje natural.
+        </p>
+        <p>
+          En lugar de escribir el código, hemos descrito lo que queríamos: <em>«una web estilo MIT, con tarjetas
+          de los participantes, sin datos personales»</em>. La IA hace preguntas, propone opciones, escribe el
+          código y lo prueba. Y cuando algo no encaja, lo decimos y lo ajusta.
+        </p>
+        <p>
+          Eso es, en esencia, la <strong>IA agéntica</strong>: no una herramienta que solo responde preguntas,
+          sino un colaborador que entiende un objetivo, ejecuta los pasos necesarios y te avisa cuando hay que decidir.
+        </p>
+
+        <div class="analogy">
+          <strong>Analogía:</strong> antes, programar era como construir un mueble pieza a pieza con un manual
+          en chino. Ahora es como contratar a un carpintero al que le explicas en español lo que quieres,
+          y que te enseña cada paso por si quieres cambiar algo.
+        </div>
+
+        <h3><span class="step-num">CIERRE</span> ¿Y ahora?</h3>
+        <p>
+          La web que estás viendo es el resultado de una conversación de aproximadamente una hora, sin escribir
+          una sola línea de código a mano. La idea, la dirección y las decisiones importantes &mdash; qué mostrar,
+          qué tono usar, qué dejar fuera &mdash; siguen siendo enteramente humanas.
+        </p>
+        <p>
+          La tecnología cambia. La intención, no.
+        </p>
+
+        <a href="index.html" class="back-link" style="margin-top: 2.5rem;">&larr; Volver a la portada</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <p class="footer-meta">
+        Workshop · MIT Professional Education · IA Agéntica para la Transformación Empresarial
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

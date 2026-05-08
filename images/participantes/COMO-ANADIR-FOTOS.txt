@@ -1,0 +1,30 @@
+Cómo añadir la foto de un participante
+=======================================
+
+1. Pídele al participante una foto cuadrada (idealmente 400×400 px o más).
+   Formato JPG o PNG.
+
+2. Guárdala en esta carpeta con el nombre normalizado del participante:
+   - todo en minúscula
+   - sin tildes, sin "ñ"
+   - separadores con guión
+   - extensión .jpg
+
+   Ejemplos:
+     carlos-ruiz.jpg
+     marina-roca.jpg
+     jose-tam.jpg
+     victor-ignacio-tortoriello.jpg
+
+3. En index.html, sustituye en la tarjeta del participante:
+
+     <div class="avatar">C</div>
+
+   por:
+
+     <div class="avatar"><img src="images/participantes/carlos-ruiz.jpg" alt=""></div>
+
+4. Guarda y comprueba abriendo index.html en el navegador.
+
+Nota: si una foto no existe, la inicial del nombre actúa como fallback visual.
+La página seguirá funcionando perfectamente sin fotos.

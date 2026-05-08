@@ -1,0 +1,15 @@
+# Material privado del workshop (NO subir a GitHub público)
+CORPUS/
+PROMPT*.txt
+
+# Archivos temporales del sistema
+Thumbs.db
+.DS_Store
+desktop.ini
+~$*
+
+# Editores y herramientas
+.vscode/
+.idea/
+.claude/
+*.swp
