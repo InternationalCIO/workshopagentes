@@ -67,6 +67,18 @@ body {
 
 .phase-badge strong { color: #14541f; font-weight: 700; }
 
+.phase-version {
+  display: inline-block;
+  background: #14541f;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  padding: 0.1rem 0.45rem;
+  border-radius: 4px;
+  margin: 0 0.1rem;
+}
+
 .phase-badge-dot {
   width: 9px;
   height: 9px;
