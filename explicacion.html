@@ -200,6 +200,20 @@
           y mezcla con un <em>«gracias»</em> para ver al orquestador volver al smalltalk.
         </p>
 
+        <p>
+          <strong>Mejora pedagógica:</strong> los comandos con barra (<code>/sumar</code>) son rápidos pero rígidos.
+          Hemos añadido también <strong>detección en lenguaje natural</strong>: el agente reconoce sinónimos
+          (<em>«suma», «más», «por», «entre», «multiplica»&hellip;</em>) y extrae los números del mensaje.
+          Así puedes escribir <em>«quiero sumar 5 y 3»</em> o <em>«multiplica 4 por 6»</em> y funciona igual.
+        </p>
+
+        <div class="analogy">
+          <strong>¿Cómo lo logramos sin IA?</strong> Buscamos en el mensaje (a) una palabra clave que indique
+          la operación y (b) al menos dos números. Si están las dos cosas, es una petición matemática y la
+          ejecutamos. Si falta alguna, no lo es. Es como un detective con dos pistas: motivo y arma. Sin las dos,
+          no hay caso.
+        </div>
+
         <h3><span class="step-num">CIERRE</span> ¿Y ahora?</h3>
         <p>
           La web que estás viendo es el resultado de una conversación de aproximadamente una hora, sin escribir

@@ -17,12 +17,9 @@ const orquestadorAgent = {
     '👋 ¡Hola! Soy <strong>orquestadorAgent</strong>, el agente de este workshop.\n\n' +
     'Sé conversar contigo (saludos, despedidas, agradecimientos, ¿cómo estás?) y, si necesitas hacer ' +
     'cuentas, delego en mi compañero <strong>MatematicasAgente</strong>.\n\n' +
-    'Comandos disponibles:\n' +
-    '• <code>/sumar A B</code>\n' +
-    '• <code>/restar A B</code>\n' +
-    '• <code>/multiplicar A B</code>\n' +
-    '• <code>/dividir A B</code>\n' +
-    '• <code>/ayuda</code>\n\n' +
+    'Puedes pedírmelo de dos formas:\n' +
+    '• Con comando: <code>/sumar 5 3</code> · <code>/restar</code> · <code>/multiplicar</code> · <code>/dividir</code> · <code>/ayuda</code>\n' +
+    '• En lenguaje natural: <em>«quiero sumar 5 y 3»</em>, <em>«multiplica 4 por 6»</em>, <em>«10 entre 2»</em>, etc.\n\n' +
     'Hablo <strong>únicamente en español</strong>. ¿En qué te ayudo?',
 
   // Quita tildes, pasa a minúsculas y limpia signos.
@@ -116,11 +113,15 @@ const orquestadorAgent = {
   },
 
   responder(texto) {
-    // 1. Si es un comando matemático, delegamos en MatematicasAgente.
+    // 1. Comando matemático explícito (/sumar 5 3) → delega en MatematicasAgente.
     if (typeof matematicasAgente !== 'undefined' && matematicasAgente.esComando(texto)) {
       return matematicasAgente.ejecutar(texto);
     }
-    // 2. Si no, gestionamos el smalltalk como antes.
+    // 2. Petición matemática en lenguaje natural ("quiero sumar 5 y 3", "5 por 6").
+    if (typeof matematicasAgente !== 'undefined' && matematicasAgente.esPeticionNatural(texto)) {
+      return matematicasAgente.ejecutarNatural(texto);
+    }
+    // 3. Smalltalk como antes.
     const intencion = this.detectarIntencion(texto);
     const opciones = this.respuestas[intencion];
     return opciones[Math.floor(Math.random() * opciones.length)];
