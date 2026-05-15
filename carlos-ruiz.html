@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carlos Ruiz · Guía para reproducir el workshop</title>
+  <meta name="description" content="Guía paso a paso para reproducir el workshop de IA Agéntica del MIT. De cero a producción.">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .step-block {
+      background: #fafaf7;
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--mit-red);
+      padding: 1.3rem 1.5rem;
+      margin: 1.2rem 0;
+      border-radius: 0 6px 6px 0;
+    }
+    .step-block h4 {
+      color: var(--mit-red);
+      font-size: 1.05rem;
+      margin-bottom: 0.6rem;
+      letter-spacing: 0.02em;
+    }
+    .step-block p:last-child { margin-bottom: 0; }
+
+    .prompt-box {
+      background: #fff;
+      border: 1px dashed var(--mit-red);
+      padding: 1rem 1.2rem;
+      border-radius: 6px;
+      margin: 0.8rem 0;
+      color: var(--ink);
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+    .prompt-box::before {
+      content: 'PROMPT';
+      display: inline-block;
+      background: var(--mit-red);
+      color: #fff;
+      padding: 0.15rem 0.55rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+    }
+    .prompt-box em { color: var(--ink); font-style: italic; }
+
+    .cmd-box {
+      background: #1a1a1a;
+      color: #f5f5f5;
+      padding: 0.9rem 1.1rem;
+      border-radius: 6px;
+      margin: 0.8rem 0;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.88rem;
+      overflow-x: auto;
+      line-height: 1.55;
+    }
+    .cmd-box::before {
+      content: '$ ';
+      color: var(--mit-red-soft);
+      font-weight: 700;
+    }
+    .cmd-box.multiline::before { content: ''; }
+    .cmd-box span.comment { color: #8a8a8a; }
+
+    .warning-box {
+      background: #fff5f5;
+      border-left: 4px solid #d12c2c;
+      padding: 1rem 1.2rem;
+      margin: 1.2rem 0;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.95rem;
+    }
+    .warning-box strong { color: #a31818; }
+
+    .tip-box {
+      background: #f0f7ff;
+      border-left: 4px solid #1976d2;
+      padding: 1rem 1.2rem;
+      margin: 1.2rem 0;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.95rem;
+    }
+    .tip-box strong { color: #0d47a1; }
+
+    .phase-marker {
+      display: inline-block;
+      background: var(--mit-red);
+      color: #fff;
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.8rem;
+      text-transform: uppercase;
+    }
+
+    .prose h3 {
+      margin-top: 3rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 2px solid var(--mit-red);
+    }
+    .prose h4 {
+      margin-top: 1.5rem;
+      color: var(--ink);
+      font-size: 1.05rem;
+    }
+    .prose ul, .prose ol {
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--ink-soft);
+    }
+    .prose ul li, .prose ol li { margin-bottom: 0.4rem; line-height: 1.6; }
+
+    .toc {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      padding: 1.5rem 1.8rem;
+      border-radius: 8px;
+      margin: 2rem 0 3rem;
+    }
+    .toc h3 {
+      margin-top: 0 !important;
+      border-bottom: none !important;
+      padding-bottom: 0 !important;
+      font-size: 1rem;
+      color: var(--ink-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .toc ol { margin-top: 0.8rem; counter-reset: toc-item; }
+    .toc ol li { list-style: none; counter-increment: toc-item; margin-bottom: 0.5rem; }
+    .toc ol li::before {
+      content: counter(toc-item, decimal-leading-zero) ' · ';
+      color: var(--mit-red);
+      font-weight: 700;
+      font-family: 'Consolas', monospace;
+      margin-right: 0.4rem;
+    }
+    .toc a { color: var(--ink); text-decoration: none; border-bottom: 1px dashed transparent; }
+    .toc a:hover { border-bottom-color: var(--mit-red); color: var(--mit-red); }
+
+    .dedicatoria {
+      max-width: 760px;
+      margin: 4rem auto 3rem;
+      padding: 2rem 2.5rem;
+      background: linear-gradient(135deg, #fafaf7 0%, #f5e6ea 100%);
+      border-left: 4px solid var(--mit-red);
+      border-radius: 0 8px 8px 0;
+      font-style: italic;
+      color: var(--ink-soft);
+      line-height: 1.7;
+      font-size: 1rem;
+    }
+    .dedicatoria strong { color: var(--ink); font-style: normal; }
+  </style>
+</head>
+<body>
+  <div class="top-bar"></div>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="kicker">Guía paso a paso · para Carlos Ruiz</p>
+      <h1>Reproducir el workshop, <span class="accent">de cero a producción</span></h1>
+      <p class="lead">
+        Esta guía es para cualquier persona — técnica o no técnica — que quiera recrear de principio a fin
+        la web del workshop. Vamos en cuatro fases, en el mismo orden en que lo construimos en clase,
+        sin dar nada por hecho.
+      </p>
+      <p class="signature">
+        Tiempo total estimado: <strong>3 a 4 horas</strong> · Coste a final de mes: prácticamente cero.
+      </p>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="prose">
+        <a href="index.html" class="back-link">&larr; Volver a la portada</a>
+
+        <div class="toc">
+          <h3>Índice</h3>
+          <ol>
+            <li><a href="#inventario">Inventario: lo que necesitas antes de empezar</a></li>
+            <li><a href="#conceptos">Conceptos básicos (sin tecnicismos)</a></li>
+            <li><a href="#fase1">Fase I — La web estática</a></li>
+            <li><a href="#fase2">Fase II — Primer agente (smalltalk)</a></li>
+            <li><a href="#fase3">Fase III — Segundo agente (matemáticas)</a></li>
+            <li><a href="#fase4">Fase IV — Tercer agente con IA real</a></li>
+            <li><a href="#seguridad">Seguridad: las reglas que no se rompen</a></li>
+            <li><a href="#cierre">Cierre y siguientes pasos</a></li>
+          </ol>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- 1. INVENTARIO -->
+        <!-- ============================================== -->
+        <h3 id="inventario">1. Inventario: lo que necesitas antes de empezar</h3>
+        <p>
+          No necesitas saber programar. Sí necesitas tener instaladas y dadas de alta unas pocas cosas.
+          Te las listo y te digo cómo conseguir cada una.
+        </p>
+
+        <h4>1.1 Cuentas online (gratis las tres)</h4>
+        <ul>
+          <li><strong>GitHub</strong> — para guardar el código. <a href="https://github.com" target="_blank" rel="noopener">github.com</a> → "Sign up".</li>
+          <li><strong>Anthropic Console</strong> — para crear la "llave" (API Key) que permite hablar con Claude. <a href="https://console.anthropic.com" target="_blank" rel="noopener">console.anthropic.com</a>. Te pedirán método de pago: la primera llave viene con $5 de crédito gratis, suficiente para hacer todo este workshop diez veces.</li>
+          <li><strong>Railway</strong> — para poner el "backend" en internet. <a href="https://railway.com" target="_blank" rel="noopener">railway.com</a> → "Login with GitHub". El plan gratis sobra.</li>
+        </ul>
+
+        <h4>1.2 Programas en tu PC</h4>
+        <ul>
+          <li><strong>Visual Studio Code</strong> (editor de texto, gratis) — <a href="https://code.visualstudio.com" target="_blank" rel="noopener">code.visualstudio.com</a>. Es donde verás los archivos. No necesitas saber usarlo, solo abrir carpetas y mirar archivos.</li>
+          <li><strong>Git</strong> (control de versiones) — <a href="https://git-scm.com/downloads" target="_blank" rel="noopener">git-scm.com/downloads</a>. Cuando lo instales, deja todas las opciones por defecto.</li>
+          <li><strong>Node.js</strong> (entorno para JavaScript del servidor) — <a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a>. Elige la versión "LTS" (la verde). Esto se necesita solo en la Fase IV.</li>
+          <li><strong>Claude Code</strong> (la herramienta clave del workshop) — instalación con un comando, te lo digo abajo.</li>
+        </ul>
+
+        <div class="tip-box">
+          <strong>¿Por qué Claude Code y no ChatGPT u otro?</strong> Claude Code no es un chat: es un <em>agente que escribe código directamente en tu carpeta</em>. Tú le hablas en español, él modifica los archivos. Ahorra horas. Otros equivalentes (Cursor, Aider, etc.) hacen lo mismo, pero esta guía está hecha con Claude Code.
+        </div>
+
+        <h4>1.3 Instalar Claude Code</h4>
+        <p>Abre una "terminal" (en Windows: busca "PowerShell" o "Terminal" en el menú inicio; en Mac: "Terminal"). Pega esto y pulsa Enter:</p>
+        <div class="cmd-box">npm install -g @anthropic-ai/claude-code</div>
+        <p>Luego, para arrancarlo dentro de una carpeta, navegas hasta esa carpeta y escribes:</p>
+        <div class="cmd-box">claude</div>
+        <p>La primera vez te pedirá iniciar sesión con tu cuenta de Anthropic.</p>
+
+        <!-- ============================================== -->
+        <!-- 2. CONCEPTOS -->
+        <!-- ============================================== -->
+        <h3 id="conceptos">2. Conceptos básicos (sin tecnicismos)</h3>
+
+        <h4>2.1 ¿Qué es un "agente"?</h4>
+        <p>
+          Un agente es <em>un trozo de software con una responsabilidad clara</em>. No necesariamente usa IA.
+          Un termostato es un agente: mide la temperatura y enciende la calefacción. En este workshop
+          construiremos cuatro agentes, en orden:
+        </p>
+        <ol>
+          <li><strong>orquestadorAgent</strong> — recibe lo que escribes y decide quién contesta. Es el "recepcionista".</li>
+          <li><strong>MatematicasAgente</strong> — sabe sumar, restar, multiplicar y dividir. Es el "contable".</li>
+          <li><strong>modeloAgente</strong> — habla con un modelo de IA real (Claude Haiku) para contestar preguntas. Es el "experto".</li>
+          <li><strong>corpusAgente</strong> — fabrica el cuaderno de información que usa modeloAgente. Es el "archivero".</li>
+        </ol>
+
+        <h4>2.2 ¿Cómo es la conversación con Claude Code?</h4>
+        <p>Le hablas en lenguaje natural. Tú describes el <em>qué quieres</em> y él se encarga del <em>cómo</em>. Ejemplos:</p>
+        <div class="prompt-box">
+          <em>«Hazme una página web con 16 tarjetas, una por participante, estilo MIT (rojo discreto, tipografía limpia). En cada tarjeta: foto opcional, nombre, rol y bio corta. Que sea responsive.»</em>
+        </div>
+        <p>
+          Si algo no te gusta, se lo dices: <em>«El rojo está demasiado oscuro»</em> o <em>«No me convencen las animaciones al pasar el ratón»</em>. Lo cambia. Esto es la idea fundamental del workshop: programar en español, no en inglés con paréntesis.
+        </p>
+
+        <h4>2.3 ¿Qué es "subir a GitHub"?</h4>
+        <p>
+          GitHub es como Dropbox para código. Tu carpeta vive en tu PC, pero también tienes una copia online (un "repositorio") sincronizada. Cada vez que cambias algo, lo "subes" (git push) y queda guardado online. Bonus: GitHub puede publicar gratis una web simple a partir de tu repo (eso se llama <strong>GitHub Pages</strong>).
+        </p>
+
+        <!-- ============================================== -->
+        <!-- 3. FASE I -->
+        <!-- ============================================== -->
+        <h3 id="fase1">3. Fase I — La web estática</h3>
+        <span class="phase-marker">~1 hora</span>
+        <p>El objetivo: una galería de participantes accesible desde una URL pública. Sin agentes todavía, sin IA. Solo HTML, CSS y un poco de JavaScript.</p>
+
+        <div class="step-block">
+          <h4>Paso 1.1 · Crear el repositorio en GitHub</h4>
+          <p>Entra en github.com, botón <strong>"New"</strong> arriba a la izquierda. Nombre del repo: <code>workshopagentes</code> (o el que quieras). Marca <strong>Public</strong>. Marca también <strong>"Add a README file"</strong> (para que no empiece vacío). Click en "Create repository".</p>
+        </div>
+
+        <div class="step-block">
+          <h4>Paso 1.2 · Clonar el repo a tu PC</h4>
+          <p>En la página del repo recién creado, botón verde <strong>"Code"</strong> → copia la URL HTTPS (algo como <code>https://github.com/tu-usuario/workshopagentes.git</code>).</p>
+          <p>Abre una terminal en una carpeta donde quieras tenerlo (por ejemplo, tu carpeta de Documentos). Escribe:</p>
+          <div class="cmd-box">git clone https://github.com/tu-usuario/workshopagentes.git</div>
+          <p>Entra en la carpeta recién creada:</p>
+          <div class="cmd-box">cd workshopagentes</div>
+        </div>
+
+        <div class="step-block">
+          <h4>Paso 1.3 · Arrancar Claude Code en esa carpeta</h4>
+          <p>Desde la terminal, estando dentro de la carpeta del repo:</p>
+          <div class="cmd-box">claude</div>
+          <p>Te abre un chat. Aquí escribirás los <em>prompts</em> (instrucciones en español).</p>
+        </div>
+
+        <div class="step-block">
+          <h4>Paso 1.4 · Pedir la primera versión</h4>
+          <p>Pega este prompt (adáptalo a tus participantes):</p>
+          <div class="prompt-box">
+            <em>Hazme una página web en HTML + CSS + JavaScript vanilla (sin frameworks, sin servidor) con una galería de tarjetas, una por participante de un workshop. Estilo MIT: color principal rojo <code>#A31F34</code>, tipografía 'Segoe UI', diseño limpio y responsive. Cada tarjeta tiene: avatar (la inicial del nombre como fallback), nombre, rol, biografía corta y un enlace opcional a LinkedIn. No incluyas datos personales (emails, teléfonos). Crea también una página "explicacion.html" donde cuentes en lenguaje no técnico cómo se construyó. Pon mis participantes a partir de la información que te paso a continuación: [pega aquí las bios]</em>
+          </div>
+          <p>Claude Code te hará preguntas o te enseñará lo que va a crear antes de hacerlo. Confírmale.</p>
+        </div>
+
+        <div class="step-block">
+          <h4>Paso 1.5 · Ver el resultado en tu navegador</h4>
+          <p>Cuando termine, abre la carpeta del repo en el explorador de archivos, busca <code>index.html</code> y haz <strong>doble clic</strong>. Se abre en tu navegador. No necesitas servidor.</p>
+        </div>
+
+        <div class="step-block">
+          <h4>Paso 1.6 · Iterar hasta que te guste</h4>
+          <p>¿Algo no encaja? Vuelve a Claude Code y díselo en español:</p>
+          <div class="prompt-box"><em>«El color rojo está demasiado intenso, suavízalo un poco. Y haz que las tarjetas tengan un efecto hover sutil que las eleve.»</em></div>
+          <p>Refresca el navegador y verás los cambios.</p>
+        </div>
+
+        <div class="step-block">
+          <h4>Paso 1.7 · Subir los cambios a GitHub</h4>
+          <p>En la terminal (puede ser otra ventana, no hace falta cerrar Claude Code):</p>
+          <div class="cmd-box multiline">git add .<br>git commit -m "Fase I: galería de participantes"<br>git push origin main</div>
+          <p>La primera vez te pedirá usuario y contraseña de GitHub (o que abras el navegador para autorizar).</p>
+        </div>
+
+        <div class="step-block">
+          <h4>Paso 1.8 · Activar GitHub Pages</h4>
+          <p>En la web de GitHub, dentro de tu repo: <strong>Settings → Pages</strong>. En "Source" elige <strong>"Deploy from a branch"</strong>, branch <strong>main</strong>, folder <strong>/ (root)</strong>. Click "Save". En 1-2 minutos te dará una URL pública del tipo <code>https://tu-usuario.github.io/workshopagentes/</code>.</p>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- 4. FASE II -->
+        <!-- ============================================== -->
+        <h3 id="fase2">4. Fase II — Primer agente (smalltalk)</h3>
+        <span class="phase-marker">~30 minutos</span>
+        <p>El objetivo: añadir un widget de chat en la esquina inferior derecha. Cuando le hablas, te contesta con frases predefinidas según la "intención" del mensaje. Sin IA todavía, solo reglas.</p>
+
+        <div class="step-block">
+          <h4>Paso 2.1 · Pedir el widget de chat</h4>
+          <p>En Claude Code (sigue abierto), pega:</p>
+          <div class="prompt-box">
+            <em>Añade a la web un widget de chat flotante en la esquina inferior derecha (botón rojo redondo). Al abrirlo, aparece una ventana con un mensaje de bienvenida y un campo de texto. Crea un agente JavaScript llamado "orquestadorAgent" que vive en el navegador. NO usa IA: detecta la intención del mensaje del usuario buscando palabras clave (saludo, despedida, agradecimiento, "cómo estás"). Si reconoce alguna, contesta con una frase de un banco predefinido. Si el mensaje parece basura (sin vocales, letras repetidas), lo dice educadamente. Hazlo todo en español, sin emojis. Crea también una sección en explicacion.html que cuente esto en lenguaje no técnico, con la analogía de "el recepcionista que solo conoce 4 frases".</em>
+          </div>
+        </div>
+
+        <div class="step-block">
+          <h4>Paso 2.2 · Probar</h4>
+          <p>Refresca el navegador. Click en el botón rojo abajo. Prueba: <em>"hola"</em>, <em>"gracias"</em>, <em>"adiós"</em>, <em>"asdfgjklñ"</em>. Cada uno debería disparar una respuesta distinta.</p>
+        </div>
+
+        <div class="step-block">
+          <h4>Paso 2.3 · Subir</h4>
+          <div class="cmd-box multiline">git add .<br>git commit -m "Fase II: orquestadorAgent con smalltalk"<br>git push origin main</div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- 5. FASE III -->
+        <!-- ============================================== -->
+        <h3 id="fase3">5. Fase III — Segundo agente (matemáticas)</h3>
+        <span class="phase-marker">~30 minutos</span>
+        <p>El objetivo: añadir un segundo agente que sepa hacer cuentas, y enseñar al orquestador a delegar en él cuando proceda. Aquí aparece el concepto clave de <em>sistema multiagente</em>.</p>
+
+        <div class="step-block">
+          <h4>Paso 3.1 · Pedir el segundo agente</h4>
+          <div class="prompt-box">
+            <em>Añade un segundo agente llamado MatematicasAgente, en un archivo separado (js/agente-matematicas.js). Solo sabe hacer cuatro cosas: <code>/sumar A B</code>, <code>/restar A B</code>, <code>/multiplicar A B</code>, <code>/dividir A B</code>, y un comando <code>/ayuda</code>. Si el orquestador detecta que el usuario empieza el mensaje con uno de esos comandos, delega en MatematicasAgente. Si no, sigue su lógica de smalltalk de antes. Maneja el caso "dividir entre cero" con un mensaje claro.</em>
+          </div>
+        </div>
+
+        <div class="step-block">
+          <h4>Paso 3.2 · Probar comandos</h4>
+          <p>En el chat: <code>/sumar 5 3</code> → debe responder 8. <code>/dividir 10 0</code> → te avisa que no se puede.</p>
+        </div>
+
+        <div class="step-block">
+          <h4>Paso 3.3 · Mejora: lenguaje natural</h4>
+          <p>Los comandos con barra son rígidos. Mejorémoslo:</p>
+          <div class="prompt-box">
+            <em>Añade a MatematicasAgente la capacidad de detectar peticiones matemáticas en lenguaje natural. Reconoce sinónimos: "más"/"sumar"/"+", "menos"/"restar"/"-", "por"/"multiplicar"/"x"/"*", "entre"/"dividir"/"partido"/"/". Extrae los dos primeros números del mensaje. Si encuentra una operación Y al menos dos números, ejecuta el cálculo. Ejemplos que deben funcionar: "quiero sumar 5 y 3", "multiplica 4 por 6", "10 entre 2".</em>
+          </div>
+        </div>
+
+        <div class="step-block">
+          <h4>Paso 3.4 · Subir</h4>
+          <div class="cmd-box multiline">git add .<br>git commit -m "Fase III: MatematicasAgente + lenguaje natural"<br>git push origin main</div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- 6. FASE IV -->
+        <!-- ============================================== -->
+        <h3 id="fase4">6. Fase IV — Tercer agente con IA real</h3>
+        <span class="phase-marker">~90 minutos</span>
+        <p>El objetivo: cuando el orquestador no sepa qué contestar (ni smalltalk ni matemáticas), delega en un <strong>modeloAgente</strong> que habla con <strong>Claude Haiku 4.5</strong>. Para mantener la API Key segura, este agente vive en un servidor (Railway). Aquí aparecen tres conceptos clave: <em>RAG con corpus</em>, <em>cacheo</em> y <em>coste por consulta</em>.</p>
+
+        <div class="warning-box">
+          <strong>Antes de empezar, una regla de oro:</strong> a partir de aquí vas a manejar una API Key (una contraseña). <strong>Nunca</strong> la pegues en un chat, en un email, en una captura, ni la subas a GitHub. Si por error lo haces: revócala inmediatamente y crea otra. Ver sección 7 (Seguridad).
+        </div>
+
+        <h4>6.1 Crear la API Key de Anthropic</h4>
+        <div class="step-block">
+          <p>Entra en <a href="https://console.anthropic.com" target="_blank" rel="noopener">console.anthropic.com</a> → <strong>Settings → API Keys → Create Key</strong>. Nombre: <code>workshop-mit</code>. Cópiala (empieza por <code>sk-ant-api03-</code>) y pégala en un gestor de contraseñas. No se puede ver dos veces.</p>
+        </div>
+
+        <h4>6.2 Crear el segundo repositorio (para el backend)</h4>
+        <div class="step-block">
+          <p>En github.com → "New repository". Nombre: <code>agenteworkshop</code>. Marca <strong>Public</strong> (o privado, da igual). Marca "Add a README". Esto será el repositorio del <em>servidor</em>, separado del front.</p>
+        </div>
+
+        <div class="tip-box">
+          <strong>¿Por qué dos repos?</strong> Porque el front vive en GitHub Pages (es solo HTML que cualquier navegador puede leer). Pero la API Key de Anthropic <strong>no puede</strong> estar en el front — sería pública. Por eso necesitas un servidor (el back) donde la Key esté como variable de entorno, oculta. La forma más limpia es tenerlos en repos separados.
+        </div>
+
+        <h4>6.3 Pedirle a Claude Code el backend</h4>
+        <div class="step-block">
+          <p>Vuelve a la carpeta del front (no clones el back todavía — Claude Code lo va a montar dentro como subcarpeta para no perderse). En Claude Code:</p>
+          <div class="prompt-box">
+            <em>Crea una subcarpeta llamada "agenteworkshop" (añádela al .gitignore del front para que los dos repos no se mezclen). Dentro, monta un backend con Node.js + Express, listo para desplegar en Railway. Endpoints: <code>GET /</code> (ping de salud), <code>GET /info</code> (info de agentes sin secretos), <code>POST /consultar</code> (recibe un mensaje, llama a modeloAgente y devuelve la respuesta). La API Key vive solo en <code>.env</code> (gitignored) con la variable <code>ANTHROPIC_API_KEY</code>. Crea dos agentes: modeloAgente (llama a Claude Haiku 4.5 usando el SDK oficial @anthropic-ai/sdk, con el corpus como system prompt y cache_control ephemeral, y devuelve también una estimación del coste de cada llamada en USD según las tarifas de Haiku: Input $1/MTok, Output $5/MTok, Cache Write $1.25/MTok, Cache Read $0.10/MTok) y corpusAgente (lee corpus/corpus.md y lo proporciona al modeloAgente; si no existe, lanza un error CORPUS_MISSING que el modeloAgente capture para responder al usuario con una frase humorística tipo "estoy ocupado, vuelve más tarde"). Crea también un README.md y un .env.example.</em>
+          </div>
+        </div>
+
+        <h4>6.4 Generar el corpus</h4>
+        <div class="step-block">
+          <p>El corpus es el "cuaderno" del agente: contiene todo lo que sabe (en este caso: los 16 participantes, el programa del workshop y cómo se construyó la web). Tienes dos opciones:</p>
+          <ul>
+            <li><strong>Manual:</strong> escribir un archivo Markdown estructurado con la info de cada participante (rol, experiencia, empresas, formación, curiosidades).</li>
+            <li><strong>Asistido:</strong> dejar a Claude Code que lo extraiga de PDFs/Word con las librerías <code>pdf-parse</code> y <code>mammoth</code>. Pídeselo así:</li>
+          </ul>
+          <div class="prompt-box">
+            <em>Quiero generar el corpus a partir de los CVs originales que están en la carpeta CORPUS/ (formatos .txt, .pdf, .docx, uno por participante). Crea un script que extraiga el texto, te muestre el contenido, y a partir de él construye un corpus.md compacto y bien estructurado: encabezado con reglas para el agente ("solo responde a partir de este documento"), sección "El programa", sección "El facilitador", sección "Los 16 participantes" (cada uno con rol, experiencia, empresas, formación, curiosidades) y sección "Cómo se construyó la web". Guárdalo en agenteworkshop/corpus/corpus.md. Los CVs originales NO se suben a GitHub (mantén CORPUS/ en el .gitignore).</em>
+          </div>
+        </div>
+
+        <h4>6.5 Subir el backend a su propio repo</h4>
+        <div class="step-block">
+          <p>Desde la subcarpeta <code>agenteworkshop</code> (en otra terminal):</p>
+          <div class="cmd-box multiline">cd agenteworkshop<br>git init<br>git branch -M main<br>git remote add origin https://github.com/tu-usuario/agenteworkshop.git<br>git add .<br>git commit -m "Fase IV: backend con modeloAgente y corpusAgente"<br>git pull --rebase origin main <span class="comment"># solo la primera vez, si el repo tenía README</span><br>git push -u origin main</div>
+          <p>Si hay conflicto en el README (por el que vino con el repo), resuélvelo manteniendo el tuyo y haz <code>git rebase --continue</code>.</p>
+        </div>
+
+        <h4>6.6 Desplegar en Railway</h4>
+        <div class="step-block">
+          <p>En <a href="https://railway.com" target="_blank" rel="noopener">railway.com</a>:</p>
+          <ol>
+            <li>"New Project" → "Deploy from GitHub repo".</li>
+            <li><strong>Importantísimo</strong>: elige el repo <code>agenteworkshop</code> (¡NO el del front!).</li>
+            <li>Railway detecta que es Node y empieza a construir (~1 minuto).</li>
+            <li>Pestaña <strong>Variables</strong> → "New Variable":
+              <ul>
+                <li>Nombre: <code>ANTHROPIC_API_KEY</code></li>
+                <li>Valor: tu clave de Anthropic (sin espacios, sin comillas).</li>
+              </ul>
+            </li>
+            <li>Railway redesplega automáticamente con la variable cargada.</li>
+            <li>Pestaña <strong>Settings → Networking → Public Networking → Generate Domain</strong>. Target port: <code>8080</code>. Click "Generate Domain".</li>
+            <li>Te da una URL pública. Cópiala y ábrela en el navegador. Debes ver:
+              <div class="cmd-box">{"servicio":"agenteworkshop","estado":"activo","fase":"IV",...}</div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="warning-box">
+          <strong>Si ves un 401 "invalid x-api-key":</strong> la clave que pegaste en Variables está mal, vacía o tiene espacios. Comprueba (icono del ojo 👁) y, si hace falta, genera otra nueva en console.anthropic.com.
+        </div>
+
+        <h4>6.7 Conectar el front al back</h4>
+        <div class="step-block">
+          <p>En Claude Code, en la carpeta del front:</p>
+          <div class="prompt-box">
+            <em>En el front: cuando el orquestador no pueda resolver con smalltalk ni con matemáticas, que delegue en el backend haciendo <code>fetch POST</code> a <code>/consultar</code>. La URL del backend la inyectamos desde index.html con <code>window.AGENTE_WORKSHOP_BACKEND_URL = '[URL de Railway aquí]'</code>. Mientras espera, muestra un indicador de "escribiendo..." (tres puntos animados). Cuando llegue la respuesta, muéstrala junto a un pequeño desglose del coste en USD (tokens de input, output y cache). Si el backend falla, muestra un mensaje claro al usuario.</em>
+          </div>
+          <p>Después: <code>git add .</code> → <code>git commit</code> → <code>git push</code>. GitHub Pages tarda 1-3 minutos en actualizar.</p>
+        </div>
+
+        <h4>6.8 Probar todo el flujo</h4>
+        <div class="step-block">
+          <p>Abre la URL pública del front (tu GitHub Pages) y abre el chat. Prueba:</p>
+          <ul>
+            <li><strong>Saludo:</strong> <em>«hola»</em> → contesta el orquestador.</li>
+            <li><strong>Matemática:</strong> <em>«suma 5 y 3»</em> → contesta MatematicasAgente.</li>
+            <li><strong>Pregunta sobre el corpus:</strong> <em>«¿Quién es Cecilia?»</em> → contesta modeloAgente con Haiku 4.5 + desglose del coste.</li>
+            <li><strong>Pregunta fuera del corpus:</strong> <em>«¿Cuál es la capital de Mongolia?»</em> → debe responder honestamente que no lo sabe.</li>
+          </ul>
+        </div>
+
+        <h4>6.9 Bonus: respuesta humorística sin corpus</h4>
+        <div class="step-block">
+          <p>Para enseñar a la clase qué pasa si el corpus desaparece, renombra el archivo:</p>
+          <div class="cmd-box multiline">cd agenteworkshop<br>git mv corpus/corpus.md corpus/corpus.md.disabled<br>git commit -am "TEST: simula falta de corpus"<br>git push</div>
+          <p>Railway redesplega en 30 seg. A partir de ese momento, cualquier pregunta que no sea smalltalk ni cuenta recibirá una de las frases humorísticas ("estoy ocupado, vuelve más tarde", etc.). Para revertir: rename inverso.</p>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- 7. SEGURIDAD -->
+        <!-- ============================================== -->
+        <h3 id="seguridad">7. Seguridad: las reglas que no se rompen</h3>
+
+        <div class="warning-box">
+          <strong>1. La API Key NUNCA se enseña.</strong> Ni en pantalla, ni en chats, ni en capturas, ni en presentaciones, ni en un Google Doc compartido, ni en un email. Si ha "salido" del sitio donde debía estar — considérala comprometida.
+        </div>
+        <div class="warning-box">
+          <strong>2. La API Key NUNCA se commitea.</strong> Vive solo en <code>.env</code>. Y <code>.env</code> está en <code>.gitignore</code>. Comprueba siempre con <code>git status</code> antes de hacer commit que no aparece ningún archivo sospechoso.
+        </div>
+        <div class="warning-box">
+          <strong>3. Si la clave se filtra, revócala en 60 segundos.</strong> Anthropic Console → Settings → API Keys → "Delete". Genera otra. Actualiza Railway.
+        </div>
+        <div class="warning-box">
+          <strong>4. El front no puede llamar directamente a Anthropic.</strong> Todo el tráfico hacia el modelo pasa por el backend. Esta separación cliente/servidor es la práctica estándar de producción y no se puede saltar — por eso usamos Railway.
+        </div>
+
+        <!-- ============================================== -->
+        <!-- 8. CIERRE -->
+        <!-- ============================================== -->
+        <h3 id="cierre">8. Cierre y siguientes pasos</h3>
+        <p>
+          Al llegar aquí tienes una web pública con cuatro agentes, un modelo de IA real, un corpus
+          curado, cacheo y cálculo de coste por consulta. Y dos repositorios bien organizados, listos para
+          seguir creciendo. Lo más importante: lo has hecho <strong>describiendo lo que querías en español</strong>,
+          sin escribir tú mismo la mayoría del código.
+        </p>
+        <p>¿Por dónde seguir?</p>
+        <ul>
+          <li><strong>Más agentes:</strong> uno de traducción, uno de calendario, uno de búsqueda web... cada uno pequeño y especializado.</li>
+          <li><strong>Multi-modelo:</strong> el modeloAgente ya está preparado para cambiar entre Haiku/Sonnet/Opus según el tipo de pregunta.</li>
+          <li><strong>Memoria persistente:</strong> guardar la conversación en una base de datos para que el agente recuerde entre sesiones.</li>
+          <li><strong>Tools / function calling:</strong> permitir que el modelo llame a APIs externas (clima, vuelos, etc.) durante la conversación.</li>
+          <li><strong>MCP:</strong> el protocolo que permite que un agente use herramientas estándar (calendario, correo, drive) sin escribir integraciones a medida.</li>
+        </ul>
+
+        <div class="dedicatoria">
+          <strong>Para Carlos, con cariño.</strong><br>
+          Construir cosas es la mejor forma de entenderlas. Si llegas hasta aquí siguiendo cada paso,
+          no es que &mdash;además&mdash; hayas aprendido a usar Claude Code y a desplegar un agente: es que
+          habrás demostrado que la barrera de entrada a la IA agéntica es mucho más baja de lo que parece.
+          La parte técnica se aprende. La <em>intención</em> &mdash;qué construir, para quién, con qué cuidado&mdash;
+          esa siempre es tuya.
+        </div>
+
+        <a href="index.html" class="back-link" style="margin-top: 2rem;">&larr; Volver a la portada</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <p class="footer-meta">
+        Workshop · MIT Professional Education · IA Agéntica para la Transformación Empresarial
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
