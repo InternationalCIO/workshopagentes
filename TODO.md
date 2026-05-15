@@ -1,6 +1,25 @@
 # TODO — Workshop Agentes
 
-## Pendientes de contenido
+## ✅ Hecho
+
+### Fases desplegadas
+- [x] **Fase I** — galería estática de 16 participantes, GitHub Pages.
+- [x] **Fase II** — orquestadorAgent con smalltalk (palabras clave + anti-basura).
+- [x] **Fase III** — MatematicasAgente con comandos y lenguaje natural.
+- [x] **Fase IV** — modeloAgente con corpus y Claude Haiku 4.5 en Railway.
+  - Backend en repo separado `agenteworkshop` (Node + Express + SDK Anthropic).
+  - Corpus de 16 participantes + workshop, cacheado con `cache_control` ephemeral.
+  - Cálculo de coste por consulta (input/output/cache write/cache read).
+  - Respuesta humorística cuando falta el corpus (`corpusAgente` lanza `CORPUS_MISSING`).
+  - Front conectado al backend con `window.AGENTE_WORKSHOP_BACKEND_URL`.
+
+### Documentación y materiales
+- [x] **README** completo del front con arquitectura de dos repos.
+- [x] **README** del backend (`agenteworkshop/README.md`) con endpoints y despliegue.
+- [x] **`carlos-ruiz.html`** — guía paso a paso para reproducir el workshop de cero (8 secciones, inventario, conceptos, las 4 fases, seguridad).
+- [x] **`presentacion-consejo-direccion.pptx`** — 10 slides ejecutivos para el Consejo de Dirección (descargable desde el footer).
+
+## 📋 Pendientes de contenido
 
 - [ ] **Recolectar fotos de los participantes**
   - Pedir al grupo una foto cuadrada (perfil profesional, idealmente 400×400 px o más).
@@ -12,25 +31,24 @@
   - Pendientes: Adrian Robles, Carlos Ruiz, Cecilia de la Paz, Fernando Cormenzana, Ivette Reina, José Tam, Marina Roca, Olga Calvo, Pablo Abinal, Raul Manso, Víctor Tortoriello.
   - Pedir solo a quienes quieran aparecer en LinkedIn — es opcional.
 
-## Pendientes técnicos
+## 🔒 Decisiones pendientes
 
-- [x] **Fase IV** — desarrollada en sesión (15/05/2026). Backend en repo `agenteworkshop`. Pendiente solo desplegar a Railway y rellenar `window.AGENTE_WORKSHOP_BACKEND_URL` en `index.html`.
-- [ ] **Desplegar backend en Railway**:
-  1. Push del repo `agenteworkshop` a GitHub.
-  2. New Project → Deploy from GitHub repo → `InternationalCIO/agenteworkshop`.
-  3. Añadir variable de entorno `ANTHROPIC_API_KEY` (nunca commitearla).
-  4. Obtener la URL pública (ej. `https://agenteworkshop-production.up.railway.app`).
-  5. Actualizar `index.html` del front con esa URL en `window.AGENTE_WORKSHOP_BACKEND_URL`.
-- [ ] **Securizar la URL** (si se decide). Opciones evaluadas en sesión:
+- [ ] **Securizar la URL** (si se decide). Opciones evaluadas:
   - Cloudflare Pages + Cloudflare Access (login por email, gratis hasta 50 usuarios).
   - GitHub Pages privado (requiere repo privado + cuenta GH para cada participante).
   - Pantalla de contraseña con JS (rápido, baja seguridad).
 
-## Mejoras visuales pendientes (idea suelta)
+## 💡 Ideas para fases siguientes
 
-- [ ] Empaquetar el widget de chat como componente reutilizable (Web Component) para poder copiarlo a otra web sin tocar HTML/CSS de fondo.
+- [ ] **Empaquetar el widget de chat como Web Component** reutilizable, para poder copiarlo a otra web sin tocar HTML/CSS de fondo.
+- [ ] **Multi-modelo**: añadir routing por tipo de pregunta (Haiku para chitchat, Sonnet para razonamiento complejo, Opus para tareas críticas).
+- [ ] **Memoria persistente**: guardar la conversación en una base de datos para que el agente recuerde entre sesiones.
+- [ ] **Tools / function calling**: permitir que el modelo llame a APIs externas durante la conversación.
+- [ ] **MCP**: integrar herramientas estándar (calendario, drive, correo) sin escribir integraciones a medida.
+- [ ] **Alertas de gasto en Railway**: configurar límite mensual de coste de Anthropic.
 
-## Criterio
+## 📚 Criterio
 
 - Trato igual para todos los participantes. Foto y LinkedIn son opcionales y se añaden a quienes los envíen.
 - La inicial del nombre funciona como avatar de fallback — la página se ve coherente sin fotos.
+- Privacidad por defecto: CVs originales nunca al repo, API Keys nunca al front.
