@@ -2,6 +2,16 @@
 CORPUS/
 PROMPT*.txt
 
+# Backend (vive en repo separado: InternationalCIO/agenteworkshop)
+agenteworkshop/
+
+# Archivos locales con secretos — NUNCA subir
+hola.txt
+*.key
+*.pem
+.env
+.env.*
+
 # Archivos temporales del sistema
 Thumbs.db
 .DS_Store

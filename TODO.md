@@ -14,7 +14,13 @@
 
 ## Pendientes técnicos
 
-- [ ] **Fase IV** — pendiente de empezar (ver `PROMPT FASE IV orquestador matematico y modelo y corpus.txt`).
+- [x] **Fase IV** — desarrollada en sesión (15/05/2026). Backend en repo `agenteworkshop`. Pendiente solo desplegar a Railway y rellenar `window.AGENTE_WORKSHOP_BACKEND_URL` en `index.html`.
+- [ ] **Desplegar backend en Railway**:
+  1. Push del repo `agenteworkshop` a GitHub.
+  2. New Project → Deploy from GitHub repo → `InternationalCIO/agenteworkshop`.
+  3. Añadir variable de entorno `ANTHROPIC_API_KEY` (nunca commitearla).
+  4. Obtener la URL pública (ej. `https://agenteworkshop-production.up.railway.app`).
+  5. Actualizar `index.html` del front con esa URL en `window.AGENTE_WORKSHOP_BACKEND_URL`.
 - [ ] **Securizar la URL** (si se decide). Opciones evaluadas en sesión:
   - Cloudflare Pages + Cloudflare Access (login por email, gratis hasta 50 usuarios).
   - GitHub Pages privado (requiere repo privado + cuenta GH para cada participante).

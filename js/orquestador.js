@@ -1,28 +1,36 @@
 /* =============================================================
-   orquestadorAgent — Fase II del workshop
+   orquestadorAgent — Fase II → IV
    -------------------------------------------------------------
-   Agente conversacional muy sencillo que vive en el navegador.
-   No usa ningún modelo de IA: detecta la INTENCIÓN del mensaje
-   buscando palabras clave en una versión normalizada del texto
-   (sin tildes, en minúsculas) y devuelve una respuesta predefinida.
-
-   Es el primer escalón. En las siguientes fases este mismo
-   orquestador delegará en agentes especializados.
+   Agente que vive en el navegador. Decide quién responde:
+     1. matematicasAgente (comando o lenguaje natural).
+     2. Smalltalk propio (saludo, despedida, gracias, bienestar).
+     3. modeloAgente en el backend (Anthropic Haiku 4.5 con corpus).
+   No usa IA por su cuenta — solo enruta y orquesta.
    ============================================================= */
+
+// URL del backend (Fase IV). En local: http://localhost:3000.
+// En producción se inyecta desde index.html con window.AGENTE_WORKSHOP_BACKEND_URL.
+const BACKEND_URL = (typeof window !== 'undefined' && window.AGENTE_WORKSHOP_BACKEND_URL)
+  ? window.AGENTE_WORKSHOP_BACKEND_URL
+  : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:3000'
+      : '');
 
 const orquestadorAgent = {
   nombre: 'orquestadorAgent',
 
   bienvenida:
     '👋 ¡Hola! Soy <strong>orquestadorAgent</strong>, el agente de este workshop.\n\n' +
-    'Sé conversar contigo (saludos, despedidas, agradecimientos, ¿cómo estás?) y, si necesitas hacer ' +
-    'cuentas, delego en mi compañero <strong>MatematicasAgente</strong>.\n\n' +
-    'Puedes pedírmelo de dos formas:\n' +
-    '• Con comando: <code>/sumar 5 3</code> · <code>/restar</code> · <code>/multiplicar</code> · <code>/dividir</code> · <code>/ayuda</code>\n' +
-    '• En lenguaje natural: <em>«quiero sumar 5 y 3»</em>, <em>«multiplica 4 por 6»</em>, <em>«10 entre 2»</em>, etc.\n\n' +
+    'Sé conversar contigo (saludos, despedidas, agradecimientos, ¿cómo estás?), ' +
+    'delego en <strong>MatematicasAgente</strong> si necesitas cuentas, y desde la ' +
+    '<strong>Fase IV</strong> delego en <strong>modeloAgente</strong> (Claude Haiku 4.5) ' +
+    'cuando me preguntas algo sobre el workshop o los participantes.\n\n' +
+    'Puedes preguntarme cosas como:\n' +
+    '• <em>«¿Quién es Cecilia de la Paz?»</em>\n' +
+    '• <em>«¿Qué participantes vienen de Argentina?»</em>\n' +
+    '• <code>/sumar 5 3</code> · <em>«multiplica 4 por 6»</em>\n\n' +
     'Hablo <strong>únicamente en español</strong>. ¿En qué te ayudo?',
 
-  // Quita tildes, pasa a minúsculas y limpia signos.
   normalizar(texto) {
     return texto
       .toLowerCase()
@@ -33,11 +41,10 @@ const orquestadorAgent = {
       .trim();
   },
 
-  // Diccionario de intenciones → palabras/expresiones clave.
   patrones: {
     saludo: [
       'hola', 'buenas', 'buenos dias', 'buen dia', 'buenas tardes',
-      'buenas noches', 'que tal', 'saludos', 'hey', 'ola'
+      'buenas noches', 'saludos', 'hey', 'ola'
     ],
     despedida: [
       'adios', 'hasta luego', 'hasta pronto', 'hasta la proxima',
@@ -45,8 +52,7 @@ const orquestadorAgent = {
     ],
     gracias: [
       'gracias', 'muchas gracias', 'mil gracias', 'te agradezco',
-      'agradecido', 'agradecida', 'genial', 'perfecto', 'muy bien',
-      'excelente', 'estupendo'
+      'agradecido', 'agradecida'
     ],
     bienestar: [
       'como estas', 'como te va', 'que tal tu dia', 'como va',
@@ -54,7 +60,6 @@ const orquestadorAgent = {
     ]
   },
 
-  // Heurística para detectar mensajes sin sentido.
   esBasura(textoNormalizado) {
     const t = textoNormalizado.replace(/\s/g, '');
     if (t.length < 2) return false;
@@ -79,7 +84,6 @@ const orquestadorAgent = {
     return 'desconocido';
   },
 
-  // Banco de respuestas (varias por intención para que no suene robótico).
   respuestas: {
     saludo: [
       '¡Hola! Encantado de saludarte.',
@@ -106,30 +110,67 @@ const orquestadorAgent = {
     ],
     vacio: [
       'No me has escrito nada todavía. ¡Anímate y dime algo!'
-    ],
-    desconocido: [
-      'En esta fase del workshop solo sé responder a saludos, despedidas, agradecimientos, preguntas sobre cómo estoy y a los comandos matemáticos: <code>/sumar</code>, <code>/restar</code>, <code>/multiplicar</code>, <code>/dividir</code> y <code>/ayuda</code>. Para el resto, espera a las próximas fases del taller.'
     ]
   },
 
-  responder(texto) {
-    // 1. Comando matemático explícito (/sumar 5 3) → delega en MatematicasAgente.
+  async manejar(texto) {
+    // 1. Comando matemático (/sumar 5 3, /ayuda, ...)
     if (typeof matematicasAgente !== 'undefined' && matematicasAgente.esComando(texto)) {
-      return matematicasAgente.ejecutar(texto);
+      return { texto: matematicasAgente.ejecutar(texto), fuente: 'matematicas' };
     }
-    // 2. Petición matemática en lenguaje natural ("quiero sumar 5 y 3", "5 por 6").
+    // 2. Matemáticas en lenguaje natural
     if (typeof matematicasAgente !== 'undefined' && matematicasAgente.esPeticionNatural(texto)) {
-      return matematicasAgente.ejecutarNatural(texto);
+      return { texto: matematicasAgente.ejecutarNatural(texto), fuente: 'matematicas' };
     }
-    // 3. Smalltalk como antes.
+    // 3. Smalltalk propio
     const intencion = this.detectarIntencion(texto);
-    const opciones = this.respuestas[intencion];
-    return opciones[Math.floor(Math.random() * opciones.length)];
+    if (intencion !== 'desconocido') {
+      const opciones = this.respuestas[intencion];
+      return {
+        texto: opciones[Math.floor(Math.random() * opciones.length)],
+        fuente: 'smalltalk'
+      };
+    }
+    // 4. Delegar en modeloAgente (backend) — Fase IV
+    return await this.delegarEnModelo(texto);
+  },
+
+  async delegarEnModelo(texto) {
+    if (!BACKEND_URL) {
+      return {
+        texto: 'El backend no está configurado todavía. Cuando se despliegue en Railway, podré contestar preguntas sobre el workshop y los participantes.',
+        fuente: 'error'
+      };
+    }
+    try {
+      const r = await fetch(BACKEND_URL + '/consultar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mensaje: texto })
+      });
+      if (!r.ok) {
+        const err = await r.json().catch(() => ({ error: r.statusText }));
+        throw new Error(err.detalle || err.error || 'Error del servidor');
+      }
+      const data = await r.json();
+      return {
+        texto: data.texto,
+        coste: data.coste,
+        modelo: data.modelo,
+        latenciaMs: data.latenciaMs,
+        fuente: 'modelo'
+      };
+    } catch (e) {
+      return {
+        texto: 'No he podido conectar con modeloAgente (' + e.message + '). Si estás viendo esto en directo, comprueba que el backend esté desplegado en Railway.',
+        fuente: 'error'
+      };
+    }
   }
 };
 
 /* =============================================================
-   Widget de chat — control del DOM
+   Widget de chat
    ============================================================= */
 
 (function initChatWidget() {
@@ -144,12 +185,39 @@ const orquestadorAgent = {
 
   let bienvenidaMostrada = false;
 
-  function añadirBurbuja(texto, autor) {
+  function añadirBurbuja(html, autor, opciones = {}) {
     const burbuja = document.createElement('div');
     burbuja.className = `chat-bubble chat-bubble-${autor}`;
-    burbuja.innerHTML = texto.replace(/\n/g, '<br>');
+    if (opciones.id) burbuja.id = opciones.id;
+    burbuja.innerHTML = html.replace(/\n/g, '<br>');
     body.appendChild(burbuja);
     body.scrollTop = body.scrollHeight;
+    return burbuja;
+  }
+
+  function añadirIndicadorTyping() {
+    const burbuja = document.createElement('div');
+    burbuja.className = 'chat-bubble chat-bubble-agente chat-bubble-typing';
+    burbuja.id = 'chatTyping';
+    burbuja.innerHTML = '<span></span><span></span><span></span>';
+    body.appendChild(burbuja);
+    body.scrollTop = body.scrollHeight;
+  }
+
+  function quitarIndicadorTyping() {
+    const t = document.getElementById('chatTyping');
+    if (t) t.remove();
+  }
+
+  function formatearCoste(coste) {
+    if (!coste || !coste.usd) return '';
+    const total = coste.usd.total;
+    const fmt = (n) => '$' + n.toFixed(6).replace(/0+$/, '0');
+    const tk = coste.tokens;
+    let cacheInfo = '';
+    if (tk.cacheRead > 0)  cacheInfo = ` · ${tk.cacheRead} cache hit`;
+    if (tk.cacheWrite > 0) cacheInfo = ` · ${tk.cacheWrite} cache write`;
+    return `<div class="chat-coste">Coste: ${fmt(total)} USD · ${tk.input} in / ${tk.output} out${cacheInfo}</div>`;
   }
 
   function abrirChat() {
@@ -173,16 +241,29 @@ const orquestadorAgent = {
 
   closeBtn.addEventListener('click', cerrarChat);
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const mensaje = input.value.trim();
     if (!mensaje) return;
     añadirBurbuja(mensaje, 'usuario');
     input.value = '';
-    setTimeout(() => {
-      const respuesta = orquestadorAgent.responder(mensaje);
-      añadirBurbuja(respuesta, 'agente');
-    }, 350);
+    input.disabled = true;
+    añadirIndicadorTyping();
+    try {
+      const resp = await orquestadorAgent.manejar(mensaje);
+      quitarIndicadorTyping();
+      let html = resp.texto;
+      if (resp.fuente === 'modelo' && resp.coste) {
+        html += formatearCoste(resp.coste);
+      }
+      añadirBurbuja(html, 'agente');
+    } catch (err) {
+      quitarIndicadorTyping();
+      añadirBurbuja('Algo ha fallado: ' + err.message, 'agente');
+    } finally {
+      input.disabled = false;
+      input.focus();
+    }
   });
 
   document.addEventListener('keydown', (e) => {

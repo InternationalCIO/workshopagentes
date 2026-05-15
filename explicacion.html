@@ -214,6 +214,97 @@
           no hay caso.
         </div>
 
+        <h3><span class="step-num">FASE IV</span> Tercer agente: ahora sí, IA de verdad</h3>
+        <p>
+          Hasta aquí, ningún agente usaba Inteligencia Artificial. Eran <em>reglas</em>: muy útiles,
+          pero limitadas a lo que el programador ya conoce. En esta fase damos el salto: añadimos un
+          tercer agente, <strong>modeloAgente</strong>, que sí habla con un modelo de IA real
+          (<strong>Claude Haiku 4.5</strong>, de Anthropic).
+        </p>
+        <p>
+          ¿Para qué sirve? Para que puedas preguntar al chat <em>cosas de verdad</em> sobre el workshop
+          y los participantes — <em>«¿Quién es Cecilia?»</em>, <em>«¿Qué participantes vienen de Argentina?»</em>,
+          <em>«Háblame del manifiesto de Pepe Tam»</em> — y el agente responda con criterio.
+        </p>
+
+        <div class="analogy">
+          <strong>Analogía:</strong> el recepcionista (orquestador) ahora tiene un nuevo colega
+          experto: un <em>archivero</em>. El archivero sabe todo sobre el workshop y los participantes porque
+          tiene un cuaderno con esa información (el <strong>corpus</strong>). Cuando una pregunta no es ni
+          smalltalk ni cuentas, el recepcionista se la pasa al archivero, que la lee, consulta su cuaderno y responde.
+        </div>
+
+        <h4 style="margin-top:1.5rem; color: var(--ink);">Cuatro ideas clave que aparecen aquí</h4>
+
+        <p>
+          <strong>1. El cuaderno (corpus).</strong> Le hemos dado al agente un único documento con la
+          información del workshop y de cada participante (perfil, experiencia, empresas, formación, curiosidades).
+          El agente <em>solo puede responder a partir de ese documento</em>. Si le preguntas sobre algo que no
+          está en él, lo dice honestamente. Esto se conoce como <em>"agentes con contexto restringido"</em>.
+        </p>
+
+        <p>
+          <strong>2. La separación cliente/servidor.</strong> Hasta ahora todo vivía en tu navegador.
+          Pero la llave de la API de Anthropic <strong>no puede</strong> viajar al navegador (sería visible para cualquiera).
+          Así que hemos partido el sistema en dos:
+        </p>
+        <ul style="margin-left:1.5rem; color: var(--ink-soft);">
+          <li><strong>Frontend</strong> (lo que ves) — vive en GitHub Pages. Sin claves.</li>
+          <li><strong>Backend</strong> (servidor) — vive en <strong>Railway</strong> (otro servicio gratuito).
+              Aquí está la clave de la API, en una variable de entorno. El cliente le pregunta por HTTP.</li>
+        </ul>
+
+        <div class="analogy">
+          <strong>Analogía:</strong> imagina un restaurante con una caja fuerte. La <em>llave</em> (API Key) está
+          dentro de la caja fuerte (el servidor), y solo el chef puede usarla. El cliente (tu navegador) pide
+          un plato desde la mesa; el chef lo prepara y lo trae. El cliente nunca toca la llave.
+        </div>
+
+        <p>
+          <strong>3. El cacheo (ahorrar dinero).</strong> Cada vez que llamamos al modelo, tenemos que mandarle
+          el cuaderno entero como contexto. Si lo mandáramos completo cada vez, pagaríamos mucho de más. Por eso usamos
+          <strong>cache_control</strong>: la primera llamada paga la "escritura en caché" un poco más cara,
+          y las siguientes (en 5 minutos) leen del caché a un <strong>precio 10 veces menor</strong>.
+        </p>
+
+        <div class="analogy">
+          <strong>Analogía:</strong> es como una fotocopiadora. La primera copia es lenta y cuesta más;
+          pero si pides 10 copias seguidas, las siguientes salen casi gratis porque el papel ya está caliente
+          y el patrón ya está cargado. Cuando pasan unos minutos sin pedir nada, el caché se enfría y vuelves al precio normal.
+        </div>
+
+        <p>
+          <strong>4. El coste visible.</strong> Cada respuesta del agente viene acompañada del coste real
+          de esa consulta en dólares: cuántos tokens (palabras) costaron la pregunta, la respuesta y el caché.
+          Es <em>cultura financiera para la era de la IA</em>: ya no son llamadas gratis; cada palabra tiene su precio,
+          y el responsable del producto debe saberlo.
+        </p>
+
+        <p>
+          <strong>Y un quinto detalle: dos agentes ayudantes.</strong>
+          El primero, <strong>modeloAgente</strong>, es el que habla con el modelo Claude.
+          El segundo se llama <strong>corpusAgente</strong> y su única tarea es <em>fabricar el cuaderno</em>
+          a partir de los CVs originales (que pueden ser PDF, Word o texto). Solo trabaja una vez, cuando el cuaderno
+          aún no existe. Esto enseña una idea importante: <em>un agente, una sola responsabilidad</em>.
+        </p>
+
+        <h4 style="margin-top:1.5rem; color: var(--ink);">El flujo completo</h4>
+        <p style="color: var(--ink-soft);">
+          1. Escribes algo en el chat → <strong>orquestadorAgent</strong> (tu navegador) lo recibe.<br>
+          2. ¿Es saludo o despedida? &rarr; responde él directamente.<br>
+          3. ¿Es una cuenta (<code>/sumar</code>, "multiplica 4 por 6")? &rarr; lo pasa a <strong>matematicasAgente</strong>.<br>
+          4. ¿Es otra cosa? &rarr; lo envía por HTTP al <strong>backend en Railway</strong>, donde vive <strong>modeloAgente</strong>.<br>
+          5. modeloAgente carga el corpus (gracias a <strong>corpusAgente</strong>), llama a <strong>Claude Haiku 4.5</strong>
+          con el cuaderno en caché, recibe la respuesta y calcula el coste.<br>
+          6. El backend devuelve respuesta + coste al navegador, y lo ves todo en el chat.
+        </p>
+
+        <p>
+          Prueba a preguntar en el chat: <em>«¿Quién tiene 9 pastores alemanes?»</em>, <em>«¿Quién vive en Costa Rica?»</em>,
+          <em>«Háblame de los 4 pilares del manifiesto de Pepe Tam»</em>. Y si preguntas algo fuera del corpus
+          (<em>«¿Cuál es la capital de Mongolia?»</em>), el agente lo reconoce y no se inventa nada.
+        </p>
+
         <h3><span class="step-num">CIERRE</span> ¿Y ahora?</h3>
         <p>
           La web que estás viendo es el resultado de una conversación de aproximadamente una hora, sin escribir
