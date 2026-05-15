@@ -5,6 +5,9 @@ PROMPT*.txt
 # Backend (vive en repo separado: InternationalCIO/agenteworkshop)
 agenteworkshop/
 
+# Carpeta temporal de generación de la presentación (.pptx)
+_pptx/
+
 # Archivos locales con secretos — NUNCA subir
 hola.txt
 *.key
